@@ -1,0 +1,79 @@
+number_format = amount formatted to 2 decimal places with digit group seperators
+
+Login
+  POST  ib/app/login
+    accessid = accessnumber
+    password = password
+  Response
+    Set-Cookie: JSESSIONID=id
+                Cookie must be set for all authenticated requests
+
+Transactions
+  GET ib/api/transactions
+    Needs JSESSIONID cookie
+  Response
+    JSON containing array of Transaction objects
+
+    Transaction {
+      accountId: accountid, use Accounts to lookup account from id
+      amount: unsigned float
+      date: Date of transaction, time not included
+      description: usually name of location transaction was processed at
+      formattedAmount: number_format amount
+      fromStatementDetails: {
+        code
+        reference
+        particulars
+      }
+      matchingTransactionAccountId: used in Funds Transfers, contains id of account money was transferred to
+      otherPartyName: name of party transaction was recieved from/sent to
+      realtime: boolean
+      transactionTypeCode: transaction type code, e.g. POS (Point of Service), FT (Funds Transfer)
+      transactionTypeDescription: Descriptive name for transaction type
+    }
+
+Accounts
+  GET ib/api2/accounts
+    Needs JSESSIONID cookie
+  Response
+    JSON containing accountInformation object
+
+    AccountInformation {
+      accountCount: number of accounts
+      accountList: Array of accounts
+    }
+
+    Account {
+      accountNumber: ???
+      actions: {
+        automaticPaymentFrom: {available: boolean}
+        billPaymentFrom: {available: boolean}
+        fundsTransferFrom: {available: boolean}
+        fundsTransferTo: {available: boolean}
+        maintain {
+          closeAllowed: boolean
+          maintainAllowed: boolean
+          maintainGoalsAllowed: boolean
+        }
+        oneOffPaymentFrom: {available: boolean}
+        viewTransacations: {available: boolean}
+      }
+      availableBalance: unsigned float
+      currency: string currency unit
+      currentBalance: unsigned float
+      formattedOtherCurrencyAvailableBalance: number_format availableBalance
+      formattedOtherCurrencyBalance: number_format currentBalance
+      id: account id, used to reference accounts in other parts of the API
+      images {
+        companyLogo: boolean
+        headerOffsetPercentage: float
+        image: id of image
+        stock: boolean
+        thumbnail: id of thumbnail
+      }
+      nickname: Nickname user has given to account
+      productCode: string
+      productName string
+      suffix: bank account number suffix
+      type: string
+    }
