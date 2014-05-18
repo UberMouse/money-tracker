@@ -7,5 +7,5 @@ require_relative 'money_tracker'
 
 use Rack::ContentLength
 
-run Sinatra::Application
+run MoneyTracker.new
 
