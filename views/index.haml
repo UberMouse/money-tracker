@@ -1,0 +1,10 @@
+!!!
+%html
+  %head
+
+  %body
+    - transactions.each do |transaction|
+      %p= transaction.description
+      %p= transaction.formatted_amount
+      %p= transaction.date
+      %br
